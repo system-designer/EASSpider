@@ -1,4 +1,4 @@
-package com.jplus.spider;
+package com.easspider.spider;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -22,18 +22,18 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class LoginPage {
+import com.easspider.constants.LoginConstants;
+
+public class LoginHandler {
 
 	private CloseableHttpClient client = LoginConstants
 			.getCustomCloseableHttpClient();
 	public static String UrlCode;// token
 	public static String loginUrl;// 登录教务系统url
-	private boolean hasLogin = false;
+	private boolean isLogined = false;//
 
-	public LoginPage() {
-		client = client == null ? LoginConstants.getCustomCloseableHttpClient()
-				: client;
-		hasLogin = false;
+	public LoginHandler() {
+		isLogined = false;
 	}
 
 	public boolean login() {
@@ -50,13 +50,13 @@ public class LoginPage {
 			HttpPost post = new HttpPost(MessageFormat.format(
 					LoginConstants.loginPostUrl, UrlCode));
 			post.setEntity(entity);
-			//发送post请求
+			// 发送post请求
 			response = client.execute(post);
-			//处理返回的结果
+			// 处理返回的结果
 			int statusCode = response.getStatusLine().getStatusCode();
 			Header[] locationHead = response.getHeaders("Location");
 			response.close();
-			//模拟登录跳转
+			// 模拟登录跳转
 			return forward(statusCode, locationHead);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,8 +64,8 @@ public class LoginPage {
 		return false;
 	}
 
-	public boolean hasLogin() {
-		return hasLogin;
+	public boolean isLogined() {
+		return isLogined;
 	}
 
 	/**
@@ -107,6 +107,7 @@ public class LoginPage {
 
 	/**
 	 * 模拟登录跳转
+	 * 
 	 * @param code
 	 * @param location
 	 * @return
@@ -120,12 +121,12 @@ public class LoginPage {
 				+ location[0].getValue());
 		CloseableHttpResponse response = client.execute(get);
 		response.close();
-		hasLogin = true;
+		isLogined = true;
 		return true;
 	}
 
 	/**
-	 * 得到完整的loginurl
+	 * 得到完整的loginUrl
 	 * 
 	 * @return
 	 * @throws IOException

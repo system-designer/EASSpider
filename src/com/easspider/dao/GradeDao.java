@@ -1,4 +1,4 @@
-package com.jplus.dao;
+package com.easspider.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 import sun.applet.Main;
 
-import com.jplus.bean.Department;
-import com.jplus.bean.Grade;
-import com.jplus.database.DatabaseAccess;
+import com.easspider.bean.Department;
+import com.easspider.bean.Grade;
+import com.easspider.database.DatabaseAccess;
 
 public class GradeDao {
 	public void insert(List<Grade> gradeList){

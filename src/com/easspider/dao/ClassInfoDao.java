@@ -1,4 +1,4 @@
-package com.jplus.dao;
+package com.easspider.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 
 import sun.applet.Main;
 
-import com.jplus.bean.ClassInfo;
-import com.jplus.bean.Major;
-import com.jplus.database.DatabaseAccess;
+import com.easspider.bean.ClassInfo;
+import com.easspider.bean.Major;
+import com.easspider.database.DatabaseAccess;
 
 public class ClassInfoDao {
 	public void insert(List<ClassInfo> classInfoList){

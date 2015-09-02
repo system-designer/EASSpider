@@ -1,4 +1,4 @@
-package com.jplus.bean;
+package com.easspider.bean;
 
 public class TimeTable {
 	private int id;

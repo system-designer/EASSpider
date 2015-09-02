@@ -1,4 +1,4 @@
-package com.jplus.util;
+package com.easspider.util;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

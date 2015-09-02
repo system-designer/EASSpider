@@ -1,6 +1,6 @@
-package com.jplus.bean;
+package com.easspider.bean;
 
-public class Grade {
+public class Department {
 	private int id;
 	private String name;
 	private String code;

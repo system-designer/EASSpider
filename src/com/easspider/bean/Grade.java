@@ -1,10 +1,9 @@
-package com.jplus.bean;
+package com.easspider.bean;
 
-public class Major {
+public class Grade {
 	private int id;
 	private String name;
 	private String code;
-	private String department;
 	public int getId() {
 		return id;
 	}
@@ -23,11 +22,4 @@ public class Major {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public String getDepartment() {
-		return department;
-	}
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-
 }

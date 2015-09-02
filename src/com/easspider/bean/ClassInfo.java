@@ -1,4 +1,4 @@
-package com.jplus.bean;
+package com.easspider.bean;
 
 public class ClassInfo {
 	private int id;

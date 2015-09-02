@@ -1,7 +1,8 @@
-package com.jplus.spider;
+package com.easspider.spider;
 
-import com.jplus.bean.Student;
-import com.jplus.dao.StudentDao;
+import com.easspider.bean.Student;
+import com.easspider.constants.LoginConstants;
+import com.easspider.dao.StudentDao;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,22 +25,29 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class StudentPick {
+public class StudentHandler {
 
 	private CloseableHttpClient client = LoginConstants
 			.getCustomCloseableHttpClient();
-	private String state;
-	private String contentRef;
-	private String searchUrl;
-	private String departName = "";
+	private String state;// 登录页面表单中__VIEWSTATE值
+	private String contentRef;// URL尾部的字符串
+	private String searchUrl;// 查询学生信息的URL
+	private String departName = "";// 院系名
+	private String imgSavedPath = "F:/StudentPicture/";// 照片存放路径
 
-	public StudentPick(LoginPage login) {
+	/**
+	 * 初始化查询，为contentRef，searchUrl，state赋值
+	 * 
+	 * @param loginHandler
+	 *            登录操作
+	 */
+	public StudentHandler(LoginHandler loginHandler) {
 		try {
-			if (login.hasLogin()) {
+			if (loginHandler.isLogined()) {
 				contentRef = MessageFormat.format(LoginConstants.contentRef,
-						LoginPage.UrlCode);
+						LoginHandler.UrlCode);
 				searchUrl = MessageFormat.format(LoginConstants.searchUrl,
-						LoginPage.UrlCode);
+						LoginHandler.UrlCode);
 				HttpGet get = new HttpGet(searchUrl);
 				get.setHeader("Referer", contentRef);
 				CloseableHttpResponse response = client.execute(get);
@@ -55,37 +63,17 @@ public class StudentPick {
 	}
 
 	/**
-	 * 得到iframe响应
-	 * 
-	 * @param serachVal
-	 *            查询值
-	 * @param mode
-	 *            查询方式
-	 * @return response响应
-	 * @throws IOException
-	 */
-	private CloseableHttpResponse getSearchResponse(String serachVal,
-			String mode) throws IOException {
-		HttpEntity entity = this.buildSearchForm(state, serachVal, mode);
-		HttpPost post = new HttpPost(searchUrl);
-		post.setHeader("Referer", searchUrl);
-		post.setEntity(entity);
-		CloseableHttpResponse response = client.execute(post);
-		return response;
-	}
-
-	/**
-	 * 通过院系名称查询到该院系所有学生
+	 * 得到学生的学号和姓名列表
 	 * 
 	 * @param departName
 	 *            院系名称
 	 * @return 学生列表
 	 */
-	public List<Student> searchPic(String departName) {
+	public List<Student> getStudentList(String departName) {
 		this.departName = departName;
 		List<Student> students = null;
 		try {
-			//通过学生信息iframe下拉框得到学生列表
+			// 通过学生信息iframe下拉框得到学生列表
 			CloseableHttpResponse response = getSearchResponse(departName,
 					"a.xy");
 			Document iframe = Jsoup.parse(EntityUtils.toString(
@@ -103,14 +91,19 @@ public class StudentPick {
 				students.add(student);
 			}
 			response.close();
-			return students;
 		} catch (IOException e) {
 			e.printStackTrace(System.out);
 		}
-		return null;
+		return students;
 	}
 
-	private List<String> generateSnoList(String yearOfAdmission) {
+	/**
+	 * 通过入学年份得到学生学号列表
+	 * 
+	 * @param yearOfAdmission
+	 * @return
+	 */
+	private List<String> getStudentSnoList(String yearOfAdmission) {
 		List<String> snoList = null;
 		try {
 			CloseableHttpResponse response = getSearchResponse(yearOfAdmission,
@@ -131,17 +124,24 @@ public class StudentPick {
 				}
 			}
 			response.close();
-			return snoList;
 		} catch (IOException e) {
 			e.printStackTrace(System.out);
 		}
-		return null;
+		return snoList;
 	}
 
-	public List<Student> searchBasicInfo(String yearOfAdmission) {
-		List<String> snoList = generateSnoList(yearOfAdmission);
+	/**
+	 * 得到学生所有信息列表
+	 * 
+	 * @param yearOfAdmission
+	 *            入学年份
+	 * @return 学生列表
+	 */
+	public List<Student> getStudentInfoList(String yearOfAdmission) {
+		List<String> snoList = getStudentSnoList(yearOfAdmission);
+		List<Student> studentList = null;
 		try {
-			List<Student> studentList = new ArrayList<Student>();
+			studentList = new ArrayList<Student>();
 			int length = snoList.size();
 			for (int i = 0; i < length; i++) {
 				String sno = snoList.get(i);
@@ -211,62 +211,47 @@ public class StudentPick {
 				}
 				response.close();
 			}
-			StudentDao sd = new StudentDao();
-			sd.insert(studentList);
 		} catch (IOException e) {
 			e.printStackTrace(System.out);
 		}
-		return null;
+		return studentList;
 	}
 
 	/**
-	 * 构建查询表单
+	 * 插入学生数据
 	 * 
-	 * @param state
-	 *            asp.net __VIEWSTATE值
-	 * @param search
-	 *            查询名称
-	 * @param mode
-	 *            查询方式
-	 * @return HttpEntity http 实体
-	 * @throws UnsupportedEncodingException
+	 * @param studentList
+	 *            学生列表
 	 */
-	private HttpEntity buildSearchForm(String state, String search, String mode)
-			throws UnsupportedEncodingException {
-		List<NameValuePair> data = new ArrayList<NameValuePair>();
-		data.add(new BasicNameValuePair("__VIEWSTATE", state));
-		data.add(new BasicNameValuePair("DropDownList1", mode));
-		data.add(new BasicNameValuePair("TextBox1", search));
-		data.add(new BasicNameValuePair("Button3", "查  询"));
-		HttpEntity entity = new UrlEncodedFormEntity(data, "gb2312");
-		return entity;
+	public void insertStudentList(List<Student> studentList) {
+		StudentDao sd = new StudentDao();
+		sd.insert(studentList);
 	}
 
 	/**
 	 * 得到学生照片
 	 * 
-	 * @param students
+	 * @param studentList
 	 *            学生列表
 	 * @param other
 	 *            附加到图片名称的文字
 	 */
-	public void getImage(List<Student> students, String... other) {
+	public void getStudentPicture(List<Student> studentList, String... other) {
 		HttpGet get = new HttpGet();
 		get.setHeader("Referer", searchUrl);
-		for (int i = 0, len = students == null ? 0 : students.size(); i < len; i++) {
-			Student student = students.get(i);
+		for (int i = 0, len = studentList == null ? 0 : studentList.size(); i < len; i++) {
+			Student student = studentList.get(i);
 			String studentName = student.getName();
 			String studentNo = student.getStudentNo();
 			if (studentNo != null && studentNo.startsWith("2014")) {
 				try {
 					get.setURI(new URI(MessageFormat.format(
-							LoginConstants.imageUrl, LoginPage.UrlCode,
+							LoginConstants.imageUrl, LoginHandler.UrlCode,
 							studentNo)));
 					CloseableHttpResponse response = client.execute(get);
 					System.out.println("GET:" + get.getURI());
 					// 设置文件路径和文件名
-					StringBuilder fileName = new StringBuilder(
-							"F:/RayLew/HBNUStudentPicture/");
+					StringBuilder fileName = new StringBuilder(imgSavedPath);
 					if (!departName.isEmpty()) {
 						fileName.append(departName).append('/')
 								.append(studentNo);
@@ -295,5 +280,48 @@ public class StudentPick {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 得到学生信息的iframe响应
+	 * 
+	 * @param serachVal
+	 *            查询值
+	 * @param mode
+	 *            查询方式:学号，姓名等
+	 * @return response响应
+	 * @throws IOException
+	 */
+	private CloseableHttpResponse getSearchResponse(String serachVal,
+			String mode) throws IOException {
+		HttpEntity entity = this.buildSearchForm(state, serachVal, mode);
+		HttpPost post = new HttpPost(searchUrl);
+		post.setHeader("Referer", searchUrl);
+		post.setEntity(entity);
+		CloseableHttpResponse response = client.execute(post);
+		return response;
+	}
+
+	/**
+	 * 构建查询表单
+	 * 
+	 * @param state
+	 *            表单中的 __VIEWSTATE
+	 * @param search
+	 *            输入框的值
+	 * @param mode
+	 *            输入框的选项:学号，姓名等
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private HttpEntity buildSearchForm(String state, String search, String mode)
+			throws UnsupportedEncodingException {
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
+		data.add(new BasicNameValuePair("__VIEWSTATE", state));
+		data.add(new BasicNameValuePair("DropDownList1", mode));
+		data.add(new BasicNameValuePair("TextBox1", search));
+		data.add(new BasicNameValuePair("Button3", "查  询"));
+		HttpEntity entity = new UrlEncodedFormEntity(data, "gb2312");
+		return entity;
 	}
 }

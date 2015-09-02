@@ -1,32 +1,38 @@
-package com.jplus.test;
+package com.easspider.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jplus.bean.Student;
-import com.jplus.dao.StudentDao;
+import com.easspider.bean.Student;
+import com.easspider.dao.StudentDao;
 
-public class TestStudentDao {
+public class StudentDaoTest {
 	public static void main(String[] args) {
-		getList();
+		getList("0820");
 	}
 
-	private static void getList() {
+	/**
+	 * 得到列表
+	 */
+	private static void getList(String birthDay) {
 		StudentDao sd = new StudentDao();
-		List<Student> list = sd.getList();
+		List<Student> list = sd.getList(birthDay);
 		int times = 0;
 		for (Student item : list) {
 			if (times % 10 == 0) {
 				System.out.println();
 			} else {
-				System.out.print(item.getStudentNo().substring(9) + ":"
+				System.out.print(item.getStudentNo()+":"
 						+ item.getName() + ",");
 			}
 			times++;
 		}
 	}
 
-	private static void insertMany() {
+	/**
+	 * 插入
+	 */
+	private static void insertList() {
 		List<Student> studentList = new ArrayList<Student>();
 		Student student = new Student();
 		student.setName("test1");

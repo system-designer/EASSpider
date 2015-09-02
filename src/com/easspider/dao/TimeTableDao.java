@@ -1,9 +1,9 @@
-package com.jplus.dao;
+package com.easspider.dao;
 
 import java.util.List;
 
-import com.jplus.bean.TimeTable;
-import com.jplus.database.DatabaseAccess;
+import com.easspider.bean.TimeTable;
+import com.easspider.database.DatabaseAccess;
 
 public class TimeTableDao {
 	public void insert(List<TimeTable> timeTableList){

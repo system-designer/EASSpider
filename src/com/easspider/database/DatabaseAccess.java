@@ -1,4 +1,4 @@
-package com.jplus.database;
+package com.easspider.database;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * 
- * @author evance
+ * @author Ray Lew
  */
 public class DatabaseAccess {
 
@@ -15,8 +15,7 @@ public class DatabaseAccess {
 	 */
 	private static final String driver = "com.mysql.jdbc.Driver";
 	private static final String url = "jdbc:mysql://localhost/hbnudata?useUnicode=true&characterEncoding=UTF-8";
-	// * 数据库连接对象
-	// */
+	// 数据库连接对象
 	private Connection conn = null;
 	/**
 	 * 数据库操作对象
