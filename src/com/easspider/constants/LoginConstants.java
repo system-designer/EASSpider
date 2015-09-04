@@ -6,8 +6,8 @@ import org.apache.http.impl.client.HttpClients;
 public class LoginConstants {
 
 	private static CloseableHttpClient client = null;
-	public final static String user = "lwh";// 教务系统管理员的账号和密码
-	public final static String password = "poiu1234";
+	public final static String user = "897929321@qq.com";// 教务系统管理员的账号和密码
+	public final static String password = "897929321@qq.com";
 	// 登录地址
 	public static String loginPostUrl = "http://www.jwgl.hbnu.edu.cn/{0}/default2.aspx";
 	// 验证码地址
