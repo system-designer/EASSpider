@@ -11,7 +11,7 @@ import java.util.List;
 public class StudentSearchTest {
 
 	public static void main(String[] args) throws Exception {
-		 getStudentPicture();
+		getStudentList();
 	}
 
 	/**
