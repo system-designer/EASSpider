@@ -6,13 +6,13 @@
 /*!40103 SET SQL_NOTES='ON' */;
 
 
-# Host: localhost    Database: hbnudata
+# Host: localhost    Database: easspider
 # ------------------------------------------------------
 # Server version 5.5.15
 
-DROP DATABASE IF EXISTS `hbnudata`;
-CREATE DATABASE `hbnudata` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `hbnudata`;
+DROP DATABASE IF EXISTS `easspider`;
+CREATE DATABASE `easspider` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `easspider`;
 
 #
 # Source for table classinfo
