@@ -1,20 +1,13 @@
 package com.easspider.util;
 
-import java.awt.Color;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.hibernate.validator.util.GetMethod;
 
 public class ImagePreProcess {
 

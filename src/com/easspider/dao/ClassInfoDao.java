@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import sun.applet.Main;
 
 import com.easspider.bean.ClassInfo;
 import com.easspider.bean.Major;
@@ -64,7 +63,7 @@ public class ClassInfoDao {
         		 classInfoList.add(classInfo);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         da.close();
         return classInfoList;

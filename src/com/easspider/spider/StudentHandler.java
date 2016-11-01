@@ -3,15 +3,6 @@ package com.easspider.spider;
 import com.easspider.bean.Student;
 import com.easspider.constants.LoginConstants;
 import com.easspider.dao.StudentDao;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -25,6 +16,15 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 public class StudentHandler {
 
 	private CloseableHttpClient client = LoginConstants
@@ -33,7 +33,7 @@ public class StudentHandler {
 	private String contentRef;// URL尾部的字符串
 	private String searchUrl;// 查询学生信息的URL
 	private String departName = "";// 院系名
-	private String imgSavedPath = "F:/StudentPicture/";// 照片存放路径
+	private String imgSavedPath = "G:/StudentPicture/";// 照片存放路径
 
 	/**
 	 * 初始化查询，为contentRef，searchUrl，state赋值
@@ -243,7 +243,7 @@ public class StudentHandler {
 			Student student = studentList.get(i);
 			String studentName = student.getName();
 			String studentNo = student.getStudentNo();
-			if (studentNo != null && studentNo.startsWith("2014")) {
+			if (studentNo != null && studentNo.startsWith("2016")) {
 				try {
 					get.setURI(new URI(MessageFormat.format(
 							LoginConstants.imageUrl, LoginHandler.UrlCode,
