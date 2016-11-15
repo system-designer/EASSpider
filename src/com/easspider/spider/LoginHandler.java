@@ -1,12 +1,6 @@
 package com.easspider.spider;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import com.easspider.constants.LoginConstants;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -22,7 +16,12 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.easspider.constants.LoginConstants;
+import javax.swing.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginHandler {
 
@@ -44,7 +43,7 @@ public class LoginHandler {
 			// 得到表单中__VIEWSTATE值
 			String state = getLoginState();
 			// 得到表单中的验证码
-			String checkCode = getChcekCode();
+			String checkCode = getCheckCode();
 			// 构造登录表单
 			HttpEntity entity = this.buildLoginForm(state, checkCode);
 			HttpPost post = new HttpPost(MessageFormat.format(
@@ -92,7 +91,7 @@ public class LoginHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	private String getChcekCode() throws IOException {
+	private String getCheckCode() throws IOException {
 		HttpGet get = new HttpGet(MessageFormat.format(
 				LoginConstants.checkCodeUrl, UrlCode));
 		CloseableHttpResponse response = client.execute(get);
