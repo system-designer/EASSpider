@@ -34,7 +34,7 @@ public class StudentSearchTest {
 		if (login.login()) {
 			System.out.println("登录成功");
 			StudentHandler student = new StudentHandler(login);
-			List<Student> students = student.getStudentList("文学院");
+			List<Student> students = student.getStudentList("音乐学院");
 			student.getStudentPicture(students);
 		} else {
 			System.out.println("登录失败,请检测用户名和密码!!!");
